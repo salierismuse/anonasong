@@ -55,6 +55,12 @@ function formatDate(timestamp) {
     }
 }
 
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 // Initialize
 const gardenManager = new GardenManager();
 
@@ -97,8 +103,9 @@ function initHomepage() {
                 .map(f => `<span class="preview-flower">${f.type}</span>`)
                 .join('');
             
+            const safeName = escapeHtml(random.displayName || random.name);
             randomGardenPreview.innerHTML = `
-                <h3 class="preview-name">${random.displayName || random.name}'s garden</h3>
+                <h3 class="preview-name">${safeName}'s garden</h3>
                 <div class="preview-flowers">${flowerPreview}</div>
                 <p class="preview-count">${random.garden.flowers.length} flower${random.garden.flowers.length !== 1 ? 's' : ''}</p>
             `;
