@@ -1,0 +1,435 @@
+// Data Management
+class GardenManager {
+    constructor() {
+        this.gardens = this.loadGardens();
+        this.flowerTypes = ['🌸', '🌺', '🌻', '🌷', '🌹', '🌼', '🌵', '🌿', '💐', '🏵️'];
+    }
+
+    loadGardens() {
+        const stored = localStorage.getItem('anonasong_gardens');
+        return stored ? JSON.parse(stored) : {};
+    }
+
+    saveGardens() {
+        localStorage.setItem('anonasong_gardens', JSON.stringify(this.gardens));
+    }
+
+    getGarden(name, index = 0) {
+        const normalizedName = name.toLowerCase().trim();
+        if (!this.gardens[normalizedName]) return null;
+        return this.gardens[normalizedName][index] || null;
+    }
+
+    getGardensForName(name) {
+        const normalizedName = name.toLowerCase().trim();
+        return this.gardens[normalizedName] || [];
+    }
+
+    addFlower(name, flower) {
+        const normalizedName = name.toLowerCase().trim();
+        
+        // Check spam filter
+        if (this.isSpam(flower.song) || this.isSpam(flower.note)) {
+            return false;
+        }
+
+        if (!this.gardens[normalizedName]) {
+            this.gardens[normalizedName] = [{ flowers: [], createdAt: Date.now() }];
+        }
+
+        const currentGarden = this.gardens[normalizedName][0];
+        
+        // Create new garden if current is full
+        if (currentGarden.flowers.length >= 25) {
+            this.gardens[normalizedName].unshift({ flowers: [], createdAt: Date.now() });
+        }
+
+        // Add flower with random type
+        flower.type = this.flowerTypes[Math.floor(Math.random() * this.flowerTypes.length)];
+        flower.id = Date.now() + Math.random();
+        flower.plantedAt = Date.now();
+        
+        this.gardens[normalizedName][0].flowers.push(flower);
+        this.saveGardens();
+        return true;
+    }
+
+    removeFlower(name, gardenIndex, flowerId) {
+        const normalizedName = name.toLowerCase().trim();
+        if (!this.gardens[normalizedName] || !this.gardens[normalizedName][gardenIndex]) return;
+        
+        this.gardens[normalizedName][gardenIndex].flowers = 
+            this.gardens[normalizedName][gardenIndex].flowers.filter(f => f.id !== flowerId);
+        
+        // Remove empty gardens (except the first one)
+        if (gardenIndex > 0 && this.gardens[normalizedName][gardenIndex].flowers.length === 0) {
+            this.gardens[normalizedName].splice(gardenIndex, 1);
+        }
+        
+        this.saveGardens();
+    }
+
+    getRandomGarden() {
+        const names = Object.keys(this.gardens).filter(name => 
+            this.gardens[name].some(g => g.flowers.length > 0)
+        );
+        if (names.length === 0) return null;
+        
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        return {
+            name: randomName,
+            displayName: this.gardens[randomName][0].displayName || randomName,
+            garden: this.gardens[randomName][0]
+        };
+    }
+
+    getTotalStats() {
+        let totalGardens = 0;
+        let totalFlowers = 0;
+        
+        Object.values(this.gardens).forEach(gardensArray => {
+            totalGardens += gardensArray.length;
+            gardensArray.forEach(garden => {
+                totalFlowers += garden.flowers.length;
+            });
+        });
+        
+        return { totalGardens, totalFlowers };
+    }
+
+    getAllFlowers() {
+        const allFlowers = [];
+        Object.entries(this.gardens).forEach(([name, gardensArray]) => {
+            gardensArray.forEach((garden, gardenIndex) => {
+                garden.flowers.forEach(flower => {
+                    allFlowers.push({
+                        name,
+                        gardenIndex,
+                        flower
+                    });
+                });
+            });
+        });
+        return allFlowers.sort((a, b) => b.flower.plantedAt - a.flower.plantedAt);
+    }
+
+    isSpam(text) {
+        if (!text) return false;
+        
+        const spamSettings = this.loadSpamSettings();
+        if (!spamSettings.enabled) return false;
+        
+        const lowerText = text.toLowerCase();
+        return spamSettings.bannedWords.some(word => 
+            word && lowerText.includes(word.toLowerCase())
+        );
+    }
+
+    loadSpamSettings() {
+        const stored = localStorage.getItem('anonasong_spam_settings');
+        return stored ? JSON.parse(stored) : {
+            enabled: true,
+            bannedWords: ['spam', 'viagra', 'casino', 'xxx']
+        };
+    }
+}
+
+// Embed handling
+function createEmbed(songInput) {
+    // Check if it's a Spotify embed
+    if (songInput.includes('spotify.com')) {
+        const match = songInput.match(/track\/([a-zA-Z0-9]+)/);
+        if (match) {
+            return `<iframe src="https://open.spotify.com/embed/track/${match[1]}" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
+        }
+    }
+    
+    // Check if it's a YouTube embed
+    if (songInput.includes('youtube.com') || songInput.includes('youtu.be')) {
+        const match = songInput.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+        if (match) {
+            return `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${match[1]}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        }
+    }
+    
+    // Check if it's already an iframe
+    if (songInput.includes('<iframe')) {
+        return songInput;
+    }
+    
+    // Otherwise, treat as title/artist
+    return null;
+}
+
+// Word count utility
+function countWords(text) {
+    return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+}
+
+// Format date
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) {
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        if (diffHours === 0) {
+            const diffMins = Math.floor(diffMs / (1000 * 60));
+            return `planted ${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+        }
+        return `planted ${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+    } else if (diffDays === 1) {
+        return 'planted yesterday';
+    } else if (diffDays < 30) {
+        return `planted ${diffDays} days ago`;
+    } else {
+        return `planted on ${date.toLocaleDateString()}`;
+    }
+}
+
+// Initialize
+const gardenManager = new GardenManager();
+
+// Page-specific initialization
+document.addEventListener('DOMContentLoaded', () => {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    if (currentPage === 'index.html' || currentPage === '') {
+        initHomepage();
+    } else if (currentPage === 'garden.html') {
+        initGardenPage();
+    }
+});
+
+// Homepage functionality
+function initHomepage() {
+    const searchInput = document.getElementById('nameSearch');
+    const searchBtn = document.getElementById('searchBtn');
+    const randomGardenPreview = document.getElementById('randomGardenPreview');
+    
+    // Search functionality
+    searchBtn.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSearch();
+    });
+    
+    function handleSearch() {
+        const name = searchInput.value.trim();
+        if (name && name.length <= 15) {
+            window.location.href = `garden.html?name=${encodeURIComponent(name)}`;
+        }
+    }
+    
+    // Display random garden
+    function displayRandomGarden() {
+        const random = gardenManager.getRandomGarden();
+        
+        if (random) {
+            const flowerPreview = random.garden.flowers.slice(0, 5)
+                .map(f => `<span class="preview-flower">${f.type}</span>`)
+                .join('');
+            
+            randomGardenPreview.innerHTML = `
+                <h3 class="preview-name">${random.displayName || random.name}'s garden</h3>
+                <div class="preview-flowers">${flowerPreview}</div>
+                <p class="preview-count">${random.garden.flowers.length} flower${random.garden.flowers.length !== 1 ? 's' : ''}</p>
+            `;
+            
+            randomGardenPreview.onclick = () => {
+                window.location.href = `garden.html?name=${encodeURIComponent(random.name)}`;
+            };
+        } else {
+            randomGardenPreview.innerHTML = `
+                <p style="color: #718096;">No gardens yet. Be the first to plant a flower!</p>
+            `;
+        }
+    }
+    
+    displayRandomGarden();
+}
+
+// Garden page functionality
+function initGardenPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const gardenName = urlParams.get('name');
+    
+    if (!gardenName) {
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    let currentGardenIndex = 0;
+    const gardens = gardenManager.getGardensForName(gardenName);
+    
+    // If no gardens exist, create one
+    if (gardens.length === 0) {
+        gardenManager.gardens[gardenName.toLowerCase().trim()] = [{
+            flowers: [],
+            createdAt: Date.now(),
+            displayName: gardenName
+        }];
+        gardenManager.saveGardens();
+    }
+    
+    // Elements
+    const gardenNameEl = document.getElementById('gardenName');
+    const gardenIndexEl = document.getElementById('gardenIndex');
+    const prevBtn = document.getElementById('prevGarden');
+    const nextBtn = document.getElementById('nextGarden');
+    const flowerContainer = document.getElementById('flowerContainer');
+    const plantBtn = document.getElementById('plantFlowerBtn');
+    
+    // Popups
+    const flowerPopup = document.getElementById('flowerPopup');
+    const plantPopup = document.getElementById('plantPopup');
+    const confirmPopup = document.getElementById('confirmPopup');
+    
+    // Display garden name
+    gardenNameEl.textContent = `${gardenName}'s garden`;
+    document.getElementById('plantForName').textContent = gardenName;
+    
+    // Navigation
+    function updateNavigation() {
+        const gardens = gardenManager.getGardensForName(gardenName);
+        prevBtn.disabled = currentGardenIndex >= gardens.length - 1;
+        nextBtn.disabled = currentGardenIndex <= 0;
+        gardenIndexEl.textContent = `garden ${gardens.length - currentGardenIndex}`;
+    }
+    
+    prevBtn.addEventListener('click', () => {
+        currentGardenIndex++;
+        displayGarden();
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        currentGardenIndex--;
+        displayGarden();
+    });
+    
+    // Display flowers
+    function displayGarden() {
+        const garden = gardenManager.getGarden(gardenName, currentGardenIndex);
+        if (!garden) return;
+        
+        flowerContainer.innerHTML = '';
+        
+        garden.flowers.forEach((flower, index) => {
+            const flowerEl = document.createElement('div');
+            flowerEl.className = 'flower';
+            flowerEl.innerHTML = `<span class="flower-icon">${flower.type}</span>`;
+            
+            // Random positioning within circular garden
+            const angle = Math.random() * Math.PI * 2;
+            const maxRadius = 200; // pixels from center
+            const minRadius = 30; // minimum distance from center
+            const radius = minRadius + Math.random() * (maxRadius - minRadius);
+            
+            // Convert to percentage based on container size (450px)
+            const containerSize = 450;
+            const x = 50 + (radius * Math.cos(angle) / containerSize) * 100;
+            const y = 50 + (radius * Math.sin(angle) / containerSize) * 100;
+            
+            flowerEl.style.left = `${x}%`;
+            flowerEl.style.top = `${y}%`;
+            
+            // Add delay to animation
+            flowerEl.style.animationDelay = `${index * 0.1}s`;
+            
+            flowerEl.addEventListener('click', () => showFlowerDetails(flower));
+            flowerContainer.appendChild(flowerEl);
+        });
+        
+        updateNavigation();
+    }
+    
+    // Show flower details
+    function showFlowerDetails(flower) {
+        const embed = flower.embed || createEmbed(flower.song);
+        
+        document.getElementById('songEmbed').innerHTML = embed || '';
+        document.getElementById('songTitle').textContent = embed ? '' : flower.song;
+        document.getElementById('songNote').textContent = flower.note || '';
+        document.getElementById('plantDate').textContent = formatDate(flower.plantedAt);
+        
+        flowerPopup.classList.remove('hidden');
+    }
+    
+    // Plant flower functionality
+    plantBtn.addEventListener('click', () => {
+        plantPopup.classList.remove('hidden');
+        document.getElementById('songInput').value = '';
+        document.getElementById('noteInput').value = '';
+        updateWordCount();
+    });
+    
+    // Word count
+    const noteInput = document.getElementById('noteInput');
+    const wordCountEl = document.getElementById('wordCount');
+    
+    function updateWordCount() {
+        const words = countWords(noteInput.value);
+        wordCountEl.textContent = `${words}/20 words`;
+        wordCountEl.style.color = words > 20 ? '#f56565' : '#718096';
+    }
+    
+    noteInput.addEventListener('input', updateWordCount);
+    
+    // Plant form submission
+    document.getElementById('plantForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const songInput = document.getElementById('songInput').value.trim();
+        const note = document.getElementById('noteInput').value.trim();
+        
+        if (!songInput) return;
+        
+        // Check word count
+        if (countWords(note) > 20) {
+            alert('Please keep your note under 20 words.');
+            return;
+        }
+        
+        const embed = createEmbed(songInput);
+        const flower = {
+            song: embed ? 'Embedded Song' : songInput.substring(0, 50),
+            embed: embed,
+            note: note
+        };
+        
+        if (gardenManager.addFlower(gardenName, flower)) {
+            plantPopup.classList.add('hidden');
+            confirmPopup.classList.remove('hidden');
+            
+            // Refresh garden display
+            currentGardenIndex = 0;
+            displayGarden();
+        } else {
+            alert('Your message was flagged as spam. Please try again.');
+        }
+    });
+    
+    // Close popups
+    document.querySelectorAll('.close-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.target.closest('.popup').classList.add('hidden');
+        });
+    });
+    
+    document.querySelector('.close-confirm-btn').addEventListener('click', () => {
+        confirmPopup.classList.add('hidden');
+    });
+    
+    // Close popup on background click
+    [flowerPopup, plantPopup, confirmPopup].forEach(popup => {
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) {
+                popup.classList.add('hidden');
+            }
+        });
+    });
+    
+    // Initial display
+    displayGarden();
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>anonasong - anonymous music confessional</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="site-title">anonasong</h1>
+            <p class="tagline">leave songs for someone, anonymously</p>
+        </header>
+
+        <main class="home-main">
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" id="nameSearch" class="search-input" placeholder="search for a name..." maxlength="15">
+                    <button id="searchBtn" class="search-btn">find garden</button>
+                </div>
+                <p class="search-hint">enter any name - real, fake, or symbolic</p>
+            </div>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <div class="random-garden-section">
+                <h2>discover a garden</h2>
+                <div id="randomGardenPreview" class="garden-preview">
+                    <!-- Random garden will be loaded here -->
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>every song is a flower, every name has a garden</p>
+            <a href="admin.html" class="admin-link">admin</a>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

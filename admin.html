@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - anonasong</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="admin-header">
+            <a href="index.html" class="back-link">← back to site</a>
+            <h1>Admin Panel</h1>
+        </header>
+
+        <main class="admin-main">
+            <div class="admin-login" id="adminLogin">
+                <h2>Admin Login</h2>
+                <input type="password" id="adminPassword" placeholder="Enter admin password">
+                <button id="loginBtn">Login</button>
+                <p class="login-hint">Default password: admin123</p>
+            </div>
+
+            <div class="admin-panel hidden" id="adminPanel">
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <h3>Total Gardens</h3>
+                        <p id="totalGardens">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Flowers</h3>
+                        <p id="totalFlowers">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Flagged Content</h3>
+                        <p id="flaggedContent">0</p>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <h2>Recent Flowers</h2>
+                    <div id="recentFlowers" class="admin-list">
+                        <!-- Recent flowers will be listed here -->
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <h2>Spam Filter Settings</h2>
+                    <div class="spam-settings">
+                        <label>
+                            <input type="checkbox" id="enableSpamFilter" checked>
+                            Enable spam filter
+                        </label>
+                        <div class="banned-words">
+                            <h3>Banned Words</h3>
+                            <textarea id="bannedWords" placeholder="Enter banned words, one per line"></textarea>
+                            <button id="saveBannedWords">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="logoutBtn" class="logout-btn">Logout</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

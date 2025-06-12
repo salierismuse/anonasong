@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden - anonasong</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="garden-header">
+            <a href="index.html" class="back-link">← back</a>
+            <h1 id="gardenName" class="garden-name"></h1>
+            <div class="garden-nav">
+                <button id="prevGarden" class="nav-btn" disabled>←</button>
+                <span id="gardenIndex">garden 1</span>
+                <button id="nextGarden" class="nav-btn" disabled>→</button>
+            </div>
+        </header>
+
+        <main class="garden-main">
+            <div class="floating-island">
+                <div class="island-base"></div>
+                <div id="flowerContainer" class="flower-container">
+                    <!-- Flowers will be dynamically added here -->
+                </div>
+                <button id="plantFlowerBtn" class="plant-btn">+ plant a flower</button>
+            </div>
+        </main>
+
+        <!-- Flower Popup -->
+        <div id="flowerPopup" class="popup hidden">
+            <div class="popup-content flower-popup">
+                <button class="close-btn">&times;</button>
+                <div class="flower-details">
+                    <div id="songEmbed" class="song-embed"></div>
+                    <h3 id="songTitle" class="song-title"></h3>
+                    <p id="songNote" class="song-note"></p>
+                    <p id="plantDate" class="plant-date"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plant Flower Popup -->
+        <div id="plantPopup" class="popup hidden">
+            <div class="popup-content plant-popup">
+                <button class="close-btn">&times;</button>
+                <h2>plant a flower for <span id="plantForName"></span></h2>
+                <form id="plantForm">
+                    <div class="form-group">
+                        <label for="songInput">song (title/artist or embed code)</label>
+                        <input type="text" id="songInput" maxlength="500" placeholder="e.g., 'Dreams - Fleetwood Mac' or Spotify/YouTube embed" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="noteInput">note (optional, max 20 words)</label>
+                        <textarea id="noteInput" placeholder="a message for them..." maxlength="200"></textarea>
+                        <span id="wordCount" class="word-count">0/20 words</span>
+                    </div>
+                    <button type="submit" class="submit-btn">plant flower</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Confirmation Popup -->
+        <div id="confirmPopup" class="popup hidden">
+            <div class="popup-content confirm-popup">
+                <div class="confirm-icon">🌸</div>
+                <h2>flower planted!</h2>
+                <p>your song has been added to the garden</p>
+                <button class="close-confirm-btn">close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
