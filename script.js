@@ -322,7 +322,7 @@ function initGardenPage() {
             
             // Random positioning within circular garden
             const angle = Math.random() * Math.PI * 2;
-            const maxRadius = 200; // pixels from center
+            const maxRadius = 180; // pixels from center (keep flowers inside island)
             const minRadius = 30; // minimum distance from center
             const radius = minRadius + Math.random() * (maxRadius - minRadius);
             

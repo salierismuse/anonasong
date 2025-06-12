@@ -250,6 +250,9 @@ header {
     align-items: center;
     justify-content: center;
     padding: 2rem 0;
+    background: linear-gradient(to bottom, #e0f7ff 0%, #f0ffef 60%, #fffdf2 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 /* Floating Island */
@@ -273,12 +276,12 @@ header {
     transform: translate(-50%, -50%);
     width: 450px;
     height: 450px;
-    background: radial-gradient(circle at center, #86efac 0%, #4ade80 40%, #22c55e 70%, #16a34a 100%);
+    background: radial-gradient(circle at center, #d6f9e6 0%, #bff7d1 40%, #a4edb8 70%, #8add9d 100%);
     border-radius: 50%;
-    box-shadow: 
-        0 20px 40px rgba(34, 197, 94, 0.3),
-        inset 0 -20px 40px rgba(22, 163, 74, 0.3),
-        inset 0 10px 20px rgba(134, 239, 172, 0.4);
+    box-shadow:
+        0 20px 40px rgba(143, 204, 166, 0.3),
+        inset 0 -20px 40px rgba(138, 221, 157, 0.3),
+        inset 0 10px 20px rgba(214, 249, 230, 0.4);
 }
 
 .island-base::before {
@@ -301,6 +304,7 @@ header {
     width: 450px;
     height: 450px;
     border-radius: 50%;
+    overflow: hidden;
     pointer-events: none;
 }
 
@@ -323,7 +327,7 @@ header {
 
 .flower-icon {
     font-size: 2.5rem;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .plant-btn {
