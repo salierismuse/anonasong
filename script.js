@@ -1,28 +1,58 @@
 import GardenManager from './gardenManager.js';
 
 // Embed handling
+function sanitizeEmbed(html) {
+    if (!html) return '';
+
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    const iframe = div.querySelector('iframe');
+    if (!iframe) return '';
+
+    const src = iframe.getAttribute('src') || '';
+    const allowed = [
+        'https://www.youtube.com/embed/',
+        'https://open.spotify.com/embed/'
+    ];
+
+    if (!allowed.some(prefix => src.startsWith(prefix))) {
+        return '';
+    }
+
+    const clean = document.createElement('iframe');
+    clean.setAttribute('src', src);
+    if (iframe.getAttribute('width')) clean.setAttribute('width', iframe.getAttribute('width'));
+    if (iframe.getAttribute('height')) clean.setAttribute('height', iframe.getAttribute('height'));
+    if (iframe.getAttribute('allow')) clean.setAttribute('allow', iframe.getAttribute('allow'));
+    if (iframe.getAttribute('allowfullscreen') !== null) clean.setAttribute('allowfullscreen', '');
+    if (iframe.getAttribute('allowtransparency') !== null) clean.setAttribute('allowtransparency', 'true');
+    clean.setAttribute('frameborder', '0');
+
+    return clean.outerHTML;
+}
+
 function createEmbed(songInput) {
     // Check if it's a Spotify embed
     if (songInput.includes('spotify.com')) {
         const match = songInput.match(/track\/([a-zA-Z0-9]+)/);
         if (match) {
-            return `<iframe src="https://open.spotify.com/embed/track/${match[1]}" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
+            return sanitizeEmbed(`<iframe src="https://open.spotify.com/embed/track/${match[1]}" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`);
         }
     }
-    
+
     // Check if it's a YouTube embed
     if (songInput.includes('youtube.com') || songInput.includes('youtu.be')) {
         const match = songInput.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
         if (match) {
-            return `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${match[1]}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            return sanitizeEmbed(`<iframe width="100%" height="200" src="https://www.youtube.com/embed/${match[1]}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`);
         }
     }
-    
+
     // Check if it's already an iframe
     if (songInput.includes('<iframe')) {
-        return songInput;
+        return sanitizeEmbed(songInput);
     }
-    
+
     // Otherwise, treat as title/artist
     return null;
 }
@@ -219,8 +249,9 @@ function initGardenPage() {
     
     // Show flower details
     function showFlowerDetails(flower) {
-        const embed = flower.embed || createEmbed(flower.song);
-        
+        const rawEmbed = flower.embed || createEmbed(flower.song);
+        const embed = sanitizeEmbed(rawEmbed);
+
         document.getElementById('songEmbed').innerHTML = embed || '';
         document.getElementById('songTitle').textContent = embed ? '' : flower.song;
         document.getElementById('songNote').textContent = flower.note || '';
