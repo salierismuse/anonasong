@@ -1,3 +1,5 @@
+import GardenManager from './gardenManager.js';
+
 // Admin functionality
 class AdminPanel {
     constructor() {
@@ -179,75 +181,6 @@ class AdminPanel {
     }
 }
 
-// Copy GardenManager class from script.js
-class GardenManager {
-    constructor() {
-        this.gardens = this.loadGardens();
-        this.flowerTypes = ['🌸', '🌺', '🌻', '🌷', '🌹', '🌼', '🌵', '🌿', '💐', '🏵️'];
-    }
-
-    loadGardens() {
-        const stored = localStorage.getItem('anonasong_gardens');
-        return stored ? JSON.parse(stored) : {};
-    }
-
-    saveGardens() {
-        localStorage.setItem('anonasong_gardens', JSON.stringify(this.gardens));
-    }
-
-    removeFlower(name, gardenIndex, flowerId) {
-        const normalizedName = name.toLowerCase().trim();
-        if (!this.gardens[normalizedName] || !this.gardens[normalizedName][gardenIndex]) return;
-        
-        this.gardens[normalizedName][gardenIndex].flowers = 
-            this.gardens[normalizedName][gardenIndex].flowers.filter(f => f.id !== flowerId);
-        
-        // Remove empty gardens (except the first one)
-        if (gardenIndex > 0 && this.gardens[normalizedName][gardenIndex].flowers.length === 0) {
-            this.gardens[normalizedName].splice(gardenIndex, 1);
-        }
-        
-        this.saveGardens();
-    }
-
-    getTotalStats() {
-        let totalGardens = 0;
-        let totalFlowers = 0;
-        
-        Object.values(this.gardens).forEach(gardensArray => {
-            totalGardens += gardensArray.length;
-            gardensArray.forEach(garden => {
-                totalFlowers += garden.flowers.length;
-            });
-        });
-        
-        return { totalGardens, totalFlowers };
-    }
-
-    getAllFlowers() {
-        const allFlowers = [];
-        Object.entries(this.gardens).forEach(([name, gardensArray]) => {
-            gardensArray.forEach((garden, gardenIndex) => {
-                garden.flowers.forEach(flower => {
-                    allFlowers.push({
-                        name,
-                        gardenIndex,
-                        flower
-                    });
-                });
-            });
-        });
-        return allFlowers.sort((a, b) => b.flower.plantedAt - a.flower.plantedAt);
-    }
-
-    loadSpamSettings() {
-        const stored = localStorage.getItem('anonasong_spam_settings');
-        return stored ? JSON.parse(stored) : {
-            enabled: true,
-            bannedWords: ['spam', 'viagra', 'casino', 'xxx']
-        };
-    }
-}
 
 // Initialize admin panel
 document.addEventListener('DOMContentLoaded', () => {
