@@ -15,10 +15,10 @@
 
         <main class="home-main">
             <div class="search-section">
-                <div class="search-container">
-                    <input type="text" id="nameSearch" class="search-input" placeholder="search for a name..." maxlength="15">
-                    <button id="searchBtn" class="search-btn">find garden</button>
-                </div>
+                <form id="searchForm" class="search-container" action="garden.html" method="get">
+                    <input type="text" id="nameSearch" name="name" class="search-input" placeholder="search for a name..." maxlength="15">
+                    <button id="searchBtn" class="search-btn" type="submit">find garden</button>
+                </form>
                 <p class="search-hint">enter any name - real, fake, or symbolic</p>
             </div>
 

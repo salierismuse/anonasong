@@ -108,16 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // Homepage functionality
 function initHomepage() {
     const searchInput = document.getElementById('nameSearch');
-    const searchBtn = document.getElementById('searchBtn');
+    const searchForm = document.getElementById('searchForm');
     const randomGardenPreview = document.getElementById('randomGardenPreview');
-    
+
     // Search functionality
-    searchBtn.addEventListener('click', handleSearch);
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleSearch();
-    });
+    searchForm.addEventListener('submit', handleSearch);
     
-    function handleSearch() {
+    function handleSearch(e) {
+        if (e) e.preventDefault();
         const name = searchInput.value.trim();
         if (name && name.length <= 15) {
             window.location.href = `garden.html?name=${encodeURIComponent(name)}`;
