@@ -6,10 +6,11 @@ import { isValidMusicUrl, detectMusicPlatform } from '@/lib/music'
 
 interface PlantFlowerFormProps {
   gardenId: string
+  gardenName?: string
   onFlowerPlanted: (flower: Flower) => void
 }
 
-export default function PlantFlowerForm({ gardenId, onFlowerPlanted }: PlantFlowerFormProps) {
+export default function PlantFlowerForm({ gardenId, gardenName, onFlowerPlanted }: PlantFlowerFormProps) {
   const [songUrl, setSongUrl] = useState('')
   const [note, setNote] = useState('')
   const [isPlanting, setIsPlanting] = useState(false)
@@ -85,24 +86,43 @@ export default function PlantFlowerForm({ gardenId, onFlowerPlanted }: PlantFlow
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
+    <form onSubmit={handleSubmit} style={{
+      display: 'flex',
+      flexDirection: 'column',
       gap: '1rem',
       width: '100%'
     }}>
       {error && (
-        <div style={{ 
-          backgroundColor: '#f5e6e6', 
-          border: '1px solid #d4a5a5', 
-          color: '#8b4513', 
-          padding: '1rem', 
+        <div style={{
+          backgroundColor: '#f5e6e6',
+          border: '1px solid #d4a5a5',
+          color: '#8b4513',
+          padding: '1rem',
           borderRadius: '0.5rem',
           fontFamily: 'Comic Sans MS, cursive',
           fontWeight: 'bold',
           textAlign: 'center'
         }}>
           {error}
+        </div>
+      )}
+
+      {gardenName && (
+        <div style={{
+          textAlign: 'center',
+          padding: '1rem',
+          backgroundColor: '#faf5ff',
+          borderRadius: '0.5rem',
+          border: '2px solid #e9d5ff'
+        }}>
+          <p style={{
+            fontSize: '0.875rem',
+            color: '#2d2d2d',
+            fontFamily: 'Comic Sans MS, cursive',
+            fontWeight: 'bold'
+          }}>
+            Planting in: <span style={{ color: '#7c3aed' }}>{gardenName}&apos;s Garden</span>
+          </p>
         </div>
       )}
 
@@ -215,7 +235,7 @@ export default function PlantFlowerForm({ gardenId, onFlowerPlanted }: PlantFlow
             cursor: (!isUrlValid || !isNoteValid || isPlanting) ? 'not-allowed' : 'pointer'
           }}
         >
-          {isPlanting ? 'Planting Flower...' : 'Plant Flower'}
+          {isPlanting ? 'Planting Song...' : 'Plant Song'}
         </button>
       </div>
 
@@ -226,7 +246,7 @@ export default function PlantFlowerForm({ gardenId, onFlowerPlanted }: PlantFlow
         fontFamily: 'Comic Sans MS, cursive',
         fontWeight: 'bold'
       }}>
-        Your flower will be planted anonymously. No account required.
+        Your song will be planted anonymously. No account required.
       </p>
     </form>
   )

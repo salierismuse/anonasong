@@ -9,13 +9,14 @@ import PlantFlowerForm from '@/components/PlantFlowerForm'
 export default function GardenPage() {
   const params = useParams()
   const gardenName = decodeURIComponent(params.name as string)
-  
+
   const [garden, setGarden] = useState<Garden | null>(null)
   const [flowers, setFlowers] = useState<Flower[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(0)
   const [totalFlowers, setTotalFlowers] = useState(0)
+  const [showPlantForm, setShowPlantForm] = useState(false)
   const FLOWERS_PER_PAGE = 24
 
   useEffect(() => {
@@ -205,22 +206,50 @@ export default function GardenPage() {
           </p>
         </div>
 
-        {/* Plant a Flower Box - Always at top center when garden has flowers */}
+        {/* Plant a Song Button - Always at top center when garden has flowers */}
         {garden && flowers.length > 0 && (
-          <div style={{ maxWidth: '36rem', margin: '0 auto 3rem auto' }}>
-            <div className="garden-container">
-              <h2 style={{ fontSize: '1.5rem', fontWeight: '500', textAlign: 'center', marginBottom: '1.5rem', color: '#2d2d2d', fontFamily: 'Comic Sans MS, cursive', textShadow: '1px 1px 0px #f0e8e8' }}>
-                Plant a Flower
-              </h2>
-              <PlantFlowerForm
-                gardenId={garden.id}
-                onFlowerPlanted={handleFlowerPlanted}
-              />
-            </div>
+          <div style={{ maxWidth: '36rem', margin: '0 auto 3rem auto', display: 'flex', justifyContent: 'center' }}>
+            {!showPlantForm ? (
+              <button
+                onClick={() => setShowPlantForm(true)}
+                className="plant-button"
+                style={{ width: '85%', fontSize: '1.1rem', padding: '1.25rem 2rem' }}
+              >
+                🌱 Plant a Song
+              </button>
+            ) : (
+              <div className="garden-container" style={{ width: '100%' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2d2d2d', fontFamily: 'Comic Sans MS, cursive', textShadow: '1px 1px 0px #f0e8e8' }}>
+                    Plant a Song
+                  </h2>
+                  <button
+                    onClick={() => setShowPlantForm(false)}
+                    aria-label="Close form"
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      fontSize: '1.5rem',
+                      cursor: 'pointer',
+                      color: '#2d2d2d',
+                      fontFamily: 'Comic Sans MS, cursive',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <PlantFlowerForm
+                  gardenId={garden.id}
+                  gardenName={gardenName}
+                  onFlowerPlanted={handleFlowerPlanted}
+                />
+              </div>
+            )}
           </div>
         )}
 
-        {/* Empty Garden - Show planting form centered */}
+        {/* Empty Garden - Show planting button centered */}
         {flowers.length === 0 && garden && (
           <div style={{ maxWidth: '36rem', margin: '0 auto' }}>
             <div className="garden-container" style={{ marginBottom: '2rem', textAlign: 'center' }}>
@@ -230,10 +259,40 @@ export default function GardenPage() {
               <p style={{ color: '#2d2d2d', marginBottom: '1.5rem', fontFamily: 'Comic Sans MS, cursive', fontWeight: 'bold', textShadow: '1px 1px 0px #f0e8e8' }}>
                 No flowers have been planted here yet. Be the first to leave a musical gift!
               </p>
-              <PlantFlowerForm
-                gardenId={garden.id}
-                onFlowerPlanted={handleFlowerPlanted}
-              />
+              {!showPlantForm ? (
+                <button
+                  onClick={() => setShowPlantForm(true)}
+                  className="plant-button"
+                  style={{ width: '85%', fontSize: '1.1rem', padding: '1.25rem 2rem' }}
+                >
+                  🌱 Plant a Song
+                </button>
+              ) : (
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                    <button
+                      onClick={() => setShowPlantForm(false)}
+                      aria-label="Close form"
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '1.5rem',
+                        cursor: 'pointer',
+                        color: '#2d2d2d',
+                        fontFamily: 'Comic Sans MS, cursive',
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <PlantFlowerForm
+                    gardenId={garden.id}
+                    gardenName={gardenName}
+                    onFlowerPlanted={handleFlowerPlanted}
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}

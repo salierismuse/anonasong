@@ -304,7 +304,7 @@ export default function CreateFlowerForm() {
             cursor: (!isGardenNameValid || !isUrlValid || !isNoteValid || isCreating) ? 'not-allowed' : 'pointer'
           }}
         >
-          {isCreating ? 'Creating Flower...' : 'Plant Flower'}
+          {isCreating ? 'Planting Song...' : 'Plant Song'}
         </button>
       </div>
 
@@ -315,7 +315,7 @@ export default function CreateFlowerForm() {
         fontFamily: 'Comic Sans MS, cursive',
         fontWeight: 'bold'
       }}>
-        Your flower will be planted anonymously. No account required.
+        Your song will be planted anonymously. No account required.
       </p>
     </form>
   )
