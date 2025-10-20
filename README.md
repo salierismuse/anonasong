@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anonasong
 
-## Getting Started
+An anonymous music confessional platform where users leave songs as digital flowers in personal gardens. A poetic space for musical expression without social complexity.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Pure Anonymity**: No accounts, no tracking, no attribution
+- **One-Way Expression**: No replies, likes, or interaction
+- **Temporal Beauty**: Gardens grow and evolve naturally
+- **Universal Access**: Anyone can visit any garden
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js 14** with App Router
+- **Tailwind CSS** for styling
+- **Supabase** for database (gardens and flowers only)
+- **TypeScript** for type safety
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Database Schema
 
-## Learn More
+The application uses two main tables:
 
-To learn more about Next.js, take a look at the following resources:
+### Gardens
+- `id`: UUID primary key
+- `name`: VARCHAR(15) - unique garden name
+- `created_at`: Timestamp
+- `updated_at`: Timestamp
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Flowers
+- `id`: UUID primary key
+- `garden_id`: Foreign key to gardens
+- `song_title`: Song title
+- `artist`: Artist name
+- `song_url`: Optional URL to song
+- `note`: Optional note (max 20 words)
+- `created_at`: Timestamp
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Constraints
 
-## Deploy on Vercel
+- **24 flowers per page** - gardens can have unlimited flowers with pagination
+- **100 characters maximum** for notes
+- **15 characters maximum** for garden names
+- **No deletion** - all flowers are permanent
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Setup Instructions
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Clone and install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Set up Supabase:**
+   - Create a new Supabase project
+   - Run the SQL schema from `supabase-schema.sql` in your Supabase SQL editor
+   - Copy your project URL and anon key
+
+3. **Configure environment variables:**
+   - Update `.env.local` with your Supabase credentials:
+     ```
+     NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+     ```
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser:**
+   - Navigate to `http://localhost:3000`
+
+## Usage
+
+1. **Find a Garden**: Search for someone's name to visit their garden
+2. **Plant a Flower**: Leave a song with an optional note
+3. **Discover Randomly**: Explore random gardens to find new music
+4. **Watch Gardens Grow**: Gardens accumulate flowers over time
+
+## Design Philosophy
+
+Anonasong represents a return to simpler, more poetic internet interactions. By removing the complexities of modern social platforms—accounts, metrics, interactions—it creates space for pure human expression through the universal language of music.
+
+Each garden becomes a living testament to how others see and remember us, growing organically through anonymous acts of musical kindness.
+
+## Privacy
+
+- No user accounts or authentication
+- No analytics or tracking
+- No cookies beyond functional storage
+- Complete anonymity for all interactions
