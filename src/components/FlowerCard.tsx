@@ -35,7 +35,7 @@ export default function FlowerCard({ flower }: FlowerCardProps) {
           fontWeight: 'bold',
           textShadow: '1px 1px 0px #f0e8e8'
         }}>
-          "{flower.note}"
+          &ldquo;{flower.note}&rdquo;
         </p>
       )}
       

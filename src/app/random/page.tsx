@@ -116,7 +116,7 @@ export default function RandomGardenPage() {
             🌸
           </div>
           <h2 style={{ fontSize: '1.5rem', fontWeight: '500', color: '#2d2d2d', marginBottom: '0.5rem', fontFamily: 'Comic Sans MS, cursive', textShadow: '1px 1px 0px #f0e8e8' }}>
-            {randomGarden?.display_name}'s Garden
+            {randomGarden?.display_name}&apos;s Garden
           </h2>
           <p style={{ color: '#4b5563' }}>
             Discover what musical flowers have been left here

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { supabase, Garden, Flower, GARDEN_CONSTRAINTS } from '@/lib/supabase'
+import { supabase, Garden, Flower } from '@/lib/supabase'
 import FlowerCard from '@/components/FlowerCard'
 import PlantFlowerForm from '@/components/PlantFlowerForm'
 
@@ -20,12 +20,14 @@ export default function GardenPage() {
 
   useEffect(() => {
     loadGarden()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gardenName])
 
   useEffect(() => {
     if (garden) {
       loadFlowers()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [garden?.id, currentPage])
 
   const loadGarden = async (retryCount = 0) => {
@@ -196,7 +198,7 @@ export default function GardenPage() {
         {/* Garden Header */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h1 className="floating-animation" style={{ fontSize: '3rem', fontWeight: '300', color: '#2d2d2d', marginBottom: '1rem', fontFamily: 'Comic Sans MS, cursive', textShadow: '1px 1px 0px #f0e8e8' }}>
-            {gardenName}'s Garden
+            {gardenName}&apos;s Garden
           </h1>
           <p style={{ color: '#2d2d2d', fontFamily: 'Comic Sans MS, cursive', fontWeight: 'bold', textShadow: '1px 1px 0px #f0e8e8' }}>
             {totalFlowers} {totalFlowers === 1 ? 'flower' : 'flowers'} planted
@@ -223,7 +225,7 @@ export default function GardenPage() {
           <div style={{ maxWidth: '36rem', margin: '0 auto' }}>
             <div className="garden-container" style={{ marginBottom: '2rem', textAlign: 'center' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '500', color: '#2d2d2d', marginBottom: '1rem', fontFamily: 'Comic Sans MS, cursive', textShadow: '1px 1px 0px #f0e8e8' }}>
-                Welcome to {gardenName}'s Garden
+                Welcome to {gardenName}&apos;s Garden
               </h2>
               <p style={{ color: '#2d2d2d', marginBottom: '1.5rem', fontFamily: 'Comic Sans MS, cursive', fontWeight: 'bold', textShadow: '1px 1px 0px #f0e8e8' }}>
                 No flowers have been planted here yet. Be the first to leave a musical gift!

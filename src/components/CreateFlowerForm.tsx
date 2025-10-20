@@ -13,7 +13,6 @@ export default function CreateFlowerForm() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
-  const wordCount = note.trim().split(/\s+/).filter(word => word.length > 0).length
   const isNoteValid = note.length <= GARDEN_CONSTRAINTS.MAX_NOTE_CHARACTERS
   const isUrlValid = songUrl.trim() && isValidMusicUrl(songUrl.trim())
   const isGardenNameValid = gardenName.trim().length > 0 && gardenName.length <= GARDEN_CONSTRAINTS.MAX_NAME_LENGTH
@@ -64,11 +63,11 @@ export default function CreateFlowerForm() {
     try {
       // Test Supabase connection first
       console.log('Testing Supabase connection...')
-      const { data: testData, error: testError } = await supabase
+      const { error: testError } = await supabase
         .from('gardens')
         .select('count')
         .limit(1)
-      
+
       if (testError) {
         console.error('Supabase connection test failed:', testError)
         setError('Database connection failed. Please check your configuration.')
