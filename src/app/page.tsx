@@ -103,18 +103,6 @@ export default function HomePage() {
               💭 What song should they listen to?
             </p>
 
-            <h2 style={{
-              fontSize: '1.5rem',
-              fontWeight: 'bold',
-              textAlign: 'center',
-              marginBottom: '1.5rem',
-              color: '#2d2d2d',
-              fontFamily: 'Comic Sans MS, cursive',
-              textShadow: '1px 1px 0px #f0e8e8'
-            }}>
-              Choose Your Action
-            </h2>
-
             <div style={{
               display: 'flex',
               flexDirection: 'column',
@@ -127,16 +115,20 @@ export default function HomePage() {
                 className="plant-button"
                 style={{ width: '85%', fontSize: '1.1rem', padding: '1.25rem 2rem' }}
               >
-                🌱 Plant a Flower
+                🌱 Plant a Song
               </button>
 
-              <button
-                onClick={() => setShowSearchForm(true)}
-                className="plant-button"
-                style={{ width: '85%', fontSize: '1.1rem', padding: '1.25rem 2rem' }}
-              >
-                🔍 Search Gardens
-              </button>
+              <input
+                type="text"
+                placeholder="Find a garden"
+                className="search-input"
+                style={{
+                  width: '85%',
+                  textAlign: 'center',
+                  padding: '1rem'
+                }}
+                onFocus={() => setShowSearchForm(true)}
+              />
             </div>
           </div>
         </div>
@@ -150,7 +142,7 @@ export default function HomePage() {
               fontFamily: 'Comic Sans MS, cursive',
               textShadow: '1px 1px 0px #f0e8e8'
             }}>
-              Plant a Flower
+              Plant a Song
             </h2>
             <button
               onClick={() => setShowCreateForm(false)}

@@ -34,7 +34,7 @@ export default function SearchGardenForm() {
             type="text"
             value={gardenName}
             onChange={(e) => setGardenName(e.target.value)}
-            placeholder="Enter a name..."
+            placeholder="Find a garden"
             className="search-input"
             maxLength={GARDEN_CONSTRAINTS.MAX_NAME_LENGTH}
             disabled={isSearching}
