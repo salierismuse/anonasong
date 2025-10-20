@@ -118,17 +118,13 @@ export default function HomePage() {
                 🌱 Plant a Song
               </button>
 
-              <input
-                type="text"
-                placeholder="Find a garden"
-                className="search-input"
-                style={{
-                  width: '85%',
-                  textAlign: 'center',
-                  padding: '1rem'
-                }}
-                onFocus={() => setShowSearchForm(true)}
-              />
+              <button
+                onClick={() => setShowSearchForm(true)}
+                className="plant-button"
+                style={{ width: '85%', fontSize: '1.1rem', padding: '1.25rem 2rem' }}
+              >
+                🔍 Find a Garden
+              </button>
             </div>
           </div>
         </div>
