@@ -151,23 +151,23 @@ export default function CreateFlowerForm() {
       )}
 
       <div style={{ width: '100%' }}>
-        <label style={{ 
-          display: 'block', 
-          fontSize: '0.875rem', 
-          fontWeight: 'bold', 
-          color: '#2d2d2d', 
+        <label style={{
+          display: 'block',
+          fontSize: '0.875rem',
+          fontWeight: 'bold',
+          color: '#2d2d2d',
           marginBottom: '0.5rem',
           fontFamily: 'Comic Sans MS, cursive',
           textAlign: 'center'
         }}>
-          Garden Name *
+          Who is this for? *
         </label>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <input
             type="text"
             value={gardenName}
             onChange={(e) => setGardenName(e.target.value)}
-            placeholder="Enter garden name..."
+            placeholder="What do they need to hear?"
             className="search-input"
             maxLength={GARDEN_CONSTRAINTS.MAX_NAME_LENGTH}
             required

@@ -121,7 +121,7 @@ export default function PlantFlowerForm({ gardenId, gardenName, onFlowerPlanted 
             fontFamily: 'Comic Sans MS, cursive',
             fontWeight: 'bold'
           }}>
-            Planting in: <span style={{ color: '#7c3aed' }}>{gardenName}&apos;s Garden</span>
+            Who is this for? <span style={{ color: '#7c3aed' }}>{gardenName}</span>
           </p>
         </div>
       )}
