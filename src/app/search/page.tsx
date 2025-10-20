@@ -108,8 +108,8 @@ export default function SearchPage() {
               fontWeight: 'bold',
               textShadow: '1px 1px 0px #f0e8e8'
             }}
-            onMouseOver={(e) => e.target.style.color = '#a67c52'}
-            onMouseOut={(e) => e.target.style.color = '#2d2d2d'}
+            onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#a67c52'}
+            onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#2d2d2d'}
           >
             Discover Random Gardens
           </button>

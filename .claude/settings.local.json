@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(move srclibspotify.ts srclibmusic.ts)"
+      "Bash(move srclibspotify.ts srclibmusic.ts)",
+      "Bash(npm run build)"
     ],
     "deny": [],
     "ask": []

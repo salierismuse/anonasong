@@ -93,8 +93,8 @@ export default function RandomGardenPage() {
                 border: 'none',
                 cursor: 'pointer'
               }}
-              onMouseOver={(e) => e.target.style.color = '#7c2d12'}
-              onMouseOut={(e) => e.target.style.color = '#9333ea'}
+              onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#7c2d12'}
+              onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#9333ea'}
             >
               Search for a specific garden
             </button>
@@ -145,12 +145,12 @@ export default function RandomGardenPage() {
               transition: 'all 0.3s'
             }}
             onMouseOver={(e) => {
-              e.target.style.borderColor = '#c4b5fd'
-              e.target.style.backgroundColor = '#faf5ff'
+              (e.target as HTMLButtonElement).style.borderColor = '#c4b5fd';
+              (e.target as HTMLButtonElement).style.backgroundColor = '#faf5ff'
             }}
             onMouseOut={(e) => {
-              e.target.style.borderColor = '#e9d5ff'
-              e.target.style.backgroundColor = 'transparent'
+              (e.target as HTMLButtonElement).style.borderColor = '#e9d5ff';
+              (e.target as HTMLButtonElement).style.backgroundColor = 'transparent'
             }}
           >
             Find Another Garden
@@ -166,8 +166,8 @@ export default function RandomGardenPage() {
               border: 'none',
               cursor: 'pointer'
             }}
-            onMouseOver={(e) => e.target.style.color = '#7c2d12'}
-            onMouseOut={(e) => e.target.style.color = '#9333ea'}
+            onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#7c2d12'}
+            onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#9333ea'}
           >
             Search for a specific garden
           </button>

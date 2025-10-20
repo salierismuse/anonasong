@@ -15,7 +15,6 @@ export default function PlantFlowerForm({ gardenId, onFlowerPlanted }: PlantFlow
   const [isPlanting, setIsPlanting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const wordCount = note.trim().split(/\s+/).filter(word => word.length > 0).length
   const isNoteValid = note.length <= GARDEN_CONSTRAINTS.MAX_NOTE_CHARACTERS
   const isUrlValid = songUrl.trim() && isValidMusicUrl(songUrl.trim())
 
